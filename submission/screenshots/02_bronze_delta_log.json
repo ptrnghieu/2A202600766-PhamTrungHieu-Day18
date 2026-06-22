@@ -1,0 +1,53 @@
+{
+  "protocol": {
+    "minReaderVersion": 1,
+    "minWriterVersion": 2
+  }
+}
+{
+  "metaData": {
+    "id": "b06b5453-77b7-42aa-9f71-5d5f61fa8a8f",
+    "name": null,
+    "description": null,
+    "format": {
+      "provider": "parquet",
+      "options": {}
+    },
+    "schemaString": "{\"type\":\"struct\",\"fields\":[{\"name\":\"request_id\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}},{\"name\":\"ts\",\"type\":\"timestamp\",\"nullable\":true,\"metadata\":{}},{\"name\":\"raw_json\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}}]}",
+    "partitionColumns": [],
+    "createdTime": 1782123643040,
+    "configuration": {}
+  }
+}
+{
+  "add": {
+    "path": "part-00001-a19b1bd3-2b62-4daf-bbbd-fe77415482ff-c000.snappy.parquet",
+    "partitionValues": {},
+    "size": 13995307,
+    "modificationTime": 1782123643682,
+    "dataChange": true,
+    "stats": "{\"numRecords\":200000,\"minValues\":{\"request_id\":\"000101be-69d5-4904-a05c-9bd7b458b57e\",\"raw_json\":\"{\\\"model\\\": \\\"claude-haiku-4-5\\\", \\\"user_id\\\": \\\"u_1\\\", \\\"usage\\\": {\\\"input\\\": 1438, \\\"output\\\": 1846}, \\\"latency_ms\\\": 998, \\\"status\\\": \\\"ok\\\"}\",\"ts\":\"2026-04-01T00:00:00Z\"},\"maxValues\":{\"request_id\":\"ffffa9cc-4a4f-4aaf-97dd-7c67031577e6\",\"ts\":\"2026-04-07T23:59:56Z\",\"raw_json\":\"{\\\"model\\\": \\\"claude-sonnet-4-6\\\", \\\"user_id\\\": \\\"u_999\\\", \\\"usage\\\": {\\\"input\\\": 980, \\\"output\\\": 1375}, \\\"latency_ms\\\": 1986, \\\"status\\\": \\\"ok\\\"}\"},\"nullCount\":{\"request_id\":0,\"raw_json\":0,\"ts\":0}}",
+    "tags": null,
+    "deletionVector": null,
+    "baseRowId": null,
+    "defaultRowCommitVersion": null,
+    "clusteringProvider": null
+  }
+}
+{
+  "commitInfo": {
+    "timestamp": 1782123643682,
+    "operation": "WRITE",
+    "operationParameters": {
+      "mode": "Overwrite"
+    },
+    "operationMetrics": {
+      "execution_time_ms": 642,
+      "num_added_files": 1,
+      "num_added_rows": 200000,
+      "num_partitions": 0,
+      "num_removed_files": 0
+    },
+    "clientVersion": "delta-rs.py-0.25.5"
+  }
+}
