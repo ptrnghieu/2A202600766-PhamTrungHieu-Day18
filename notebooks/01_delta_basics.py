@@ -77,7 +77,8 @@ print(pl.from_arrow(dt.to_pyarrow_table()).sort("id"))
 
 # %%
 import duckdb
-duckdb.sql(f"SELECT tier, count(*) FROM delta_scan('{table_path}') GROUP BY 1").show()
+_tbl = DeltaTable(table_path).to_pyarrow_table()
+duckdb.sql("SELECT tier, count(*) FROM _tbl GROUP BY 1").show()
 
 # %% [markdown]
 # ## ✅ Deliverable check

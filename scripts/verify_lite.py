@@ -42,7 +42,8 @@ def main() -> int:
 
         step("DuckDB can scan the Delta table")
         import duckdb
-        rows = duckdb.sql(f"SELECT count(*) FROM delta_scan('{smoke_path}')").fetchone()[0]
+        _smoke_tbl = DeltaTable(smoke_path).to_pyarrow_table()
+        rows = duckdb.sql("SELECT count(*) FROM _smoke_tbl").fetchone()[0]
         assert rows == 20, f"DuckDB count should be 20, got {rows}"
 
         print("\nAll checks passed — lightweight lab is ready. Run `make lab`.")

@@ -41,7 +41,9 @@ reset(SILVER)
 
 # DuckDB does the JSON parse + dedup in one query — Polars also works,
 # DuckDB just has nicer JSON syntax for this case.
-silver_arrow = duckdb.sql(f"""
+# Read Bronze via delta-rs (avoids the delta DuckDB extension) then register.
+_bronze_tbl = DeltaTable(BRONZE).to_pyarrow_table()
+silver_arrow = duckdb.sql("""
     WITH parsed AS (
       SELECT
         request_id,
@@ -54,7 +56,7 @@ silver_arrow = duckdb.sql(f"""
         CAST(json_extract(raw_json, '$.latency_ms')   AS INTEGER) AS latency_ms,
         json_extract_string(raw_json, '$.status')         AS status,
         ROW_NUMBER() OVER (PARTITION BY request_id ORDER BY ts) AS rn
-      FROM delta_scan('{BRONZE}')
+      FROM _bronze_tbl
     )
     SELECT request_id, ts, date, model, user_id,
            prompt_tokens, completion_tokens, latency_ms, status
@@ -86,6 +88,7 @@ COST_TABLE = """
     ('claude-opus-4-7', 15.00, 75.00)
 """
 
+_silver_tbl = DeltaTable(SILVER).to_pyarrow_table()
 gold_arrow = duckdb.sql(f"""
     WITH cost(model, c_in, c_out) AS ({COST_TABLE})
     SELECT
@@ -98,7 +101,7 @@ gold_arrow = duckdb.sql(f"""
       AVG(CASE WHEN s.status <> 'ok' THEN 1.0 ELSE 0.0 END) AS error_rate,
       (SUM(s.prompt_tokens)     * c.c_in  / 1e6) +
       (SUM(s.completion_tokens) * c.c_out / 1e6) AS cost_usd
-    FROM delta_scan('{SILVER}') s
+    FROM _silver_tbl s
     JOIN cost c USING (model)
     GROUP BY s.date, s.model, c.c_in, c.c_out
     ORDER BY s.date, s.model
